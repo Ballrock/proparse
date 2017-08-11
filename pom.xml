@@ -4,16 +4,14 @@
 
   <groupId>proparse</groupId>
   <artifactId>proparse</artifactId>
-  <version>1.0</version>
+  <version>5.0.0.0</version>
 
   <name>Proparse</name>
-  <url>https://github.com/ccleaud/proparse</url>
-
+  <url>https://github.com/jcaillon/proparse</url>
 
   <properties>
+	<ikvm>ikvm\bin</ikvm>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -133,6 +131,37 @@
         </configuration>
       </plugin>
 
+	  
+	  <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <!--
+                  Place any Ant task here. You can add anything
+                  you can add between <target> and </target> in a
+                  build.xml.
+                -->
+				<exec executable="${ikvm}\ikvmc.exe">
+					<arg value="-out:${project.build.directory}\proparse.net.dll"/>
+					<arg value="-version:${project.version}"/>
+					<arg value="-keyfile:proparse.net.snk"/>
+					<arg value="-nowarn:0108"/>
+					<arg value="${project.build.directory}\${project.artifactId}-${project.version}.jar"/>
+					<arg value="${project.build.directory}\lib\*"/>
+				</exec>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+	  
     </plugins>
   </build>
 

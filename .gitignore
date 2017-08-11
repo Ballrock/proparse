@@ -4,3 +4,5 @@ output
 pubs
 listingfile.txt
 *.iml
+/ikvmbin
+/ikvm
