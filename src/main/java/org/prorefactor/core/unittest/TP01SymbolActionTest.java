@@ -15,7 +15,7 @@ package org.prorefactor.core.unittest;
 import org.prorefactor.treeparser.SymbolScope;
 import org.prorefactor.treeparser.ParseUnit;
 import org.prorefactor.treeparser01.TP01Support;
-import org.prorefactor.treeparser01.TreeParser01;
+import org.prorefactor.treeparser01.TreeParser01Cust;
 
 import junit.framework.TestCase;
 
@@ -27,13 +27,13 @@ import java.io.File;
  */
 public class TP01SymbolActionTest extends TestCase {
 	private TP01Support walkAction;
-	private TreeParser01 walker;
+	private TreeParser01Cust walker;
 
 
 	@Override
 	public void setUp(){
 		walkAction = new TP01Support();
-		walker = new TreeParser01();
+		walker = new TreeParser01Cust();
 		walker.setActionObject(walkAction);
 	}
 

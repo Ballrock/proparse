@@ -62,8 +62,8 @@ import antlr.collections.AST;
 
 
 /**
- * Provides all functions called by TreeParser01.
- * TreeParser01 does not, itself, define any actions.
+ * Provides all functions called by TreeParser01Cust.
+ * TreeParser01Cust does not, itself, define any actions.
  * Instead, it only makes calls to the functions defined
  * in this class.
  */

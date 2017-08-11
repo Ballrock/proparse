@@ -24,7 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.prorefactor.refactor.RefactorSession;
 import org.prorefactor.treeparser.ParseUnit;
-import org.prorefactor.treeparserbase.JPTreeParser;
+import org.prorefactor.treeparserbase.JPTreeParserCust;
 
 
 /** Reads settings from ./parseany.properties.
@@ -88,7 +88,7 @@ public class ParseAny extends TestCase {
 	private void parseOne(File file) throws Exception {
 		System.out.println(file.getPath());
 		ParseUnit pu = new ParseUnit(file);
-		pu.treeParser(new JPTreeParser());
+		pu.treeParser(new JPTreeParserCust());
 		pu.treeParser01();
 	}
 	

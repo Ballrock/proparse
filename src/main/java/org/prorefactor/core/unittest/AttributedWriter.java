@@ -109,7 +109,7 @@ public class AttributedWriter {
 
 
 	/** Parse and write a source file, with comments detailing some of the
-	 * node attributes added by TreeParser01.
+	 * node attributes added by TreeParser01Cust.
 	 * @param inName Name of the compile unit's source file.
 	 * @param outName Name of the file to write out to.
 	 */

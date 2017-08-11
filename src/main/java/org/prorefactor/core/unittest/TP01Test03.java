@@ -12,9 +12,7 @@
 package org.prorefactor.core.unittest;
 
 import org.prorefactor.core.schema.Schema;
-import org.prorefactor.treeparser.TreeParserWrapper;
 import org.prorefactor.treeparser.ParseUnit;
-import org.prorefactor.treeparser01.TreeParser01;
 
 import java.io.File;
 

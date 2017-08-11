@@ -41,9 +41,10 @@ options {
 // class definition options
 class TreeParser01 extends JPTreeParser;
 options {
-	importVocab = ProParser;
+	importVocab = Base;
 	defaultErrorHandler = false;
 	classHeaderSuffix = IJPTreeParser;
+	analyzerDebug = false;
 }
 
 

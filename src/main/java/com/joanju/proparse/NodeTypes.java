@@ -83,7 +83,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		ti.fullText = fullText;
 		if (ti.bitset==0)
 			ti.bitset = flags;
-		nameNums.put(ProParser._tokenNames[type], type);
+		nameNums.put(ProParserCust._tokenNames[type], type);
 	}
 
 
@@ -124,7 +124,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 	public static String getTypeName(int n) {
 		if (n > Last_Token_Number || n < 1)
 			return null;
-		String ret = ProParser._tokenNames[n];
+		String ret = ProParserCust._tokenNames[n];
 		if (ret.endsWith("_KW"))
 			ret = ret.substring(0, ret.length()-3);
 		return ret;
@@ -318,7 +318,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(ABSTRACT, 8, "abstract", TI.KEYWORD);
 		add(ACCELERATOR, 11, "accelerator", TI.KEYWORD);
 		add(ACCUMULATE, 5, "accumulate", TI.KEYWORD | TI.RESERVED);
-		add(ACTIVEFORM, 11, "active-form", TI.KEYWORD | TI.RESERVED);
+		add(ACTIVEFORM, 11, "active-form", TI.KEYWORD | TI.RESERVED | TI.SYSHDL);
 		add(ACTIVEWINDOW, 13, "active-window", TI.KEYWORD | TI.RESERVED | TI.SYSHDL);
 		add(ADD, 3, "add", TI.KEYWORD | TI.RESERVED);
 		add(ADDINTERVAL, 12, "add-interval", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
@@ -415,6 +415,11 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(BUFFERCOPY, 11, "buffer-copy", TI.KEYWORD | TI.RESERVED);
 		add(BUFFERLINES, 12, "buffer-lines", TI.KEYWORD);
 		add(BUFFERNAME, 8, "buffer-name", TI.KEYWORD);
+		add(BUFFER_GROUP_ID, 15, "buffer-group-id", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(BUFFER_GROUP_NAME, 17, "buffer-group-name", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(BUFFER_PARTITION_ID, 19, "buffer-partition-id", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(BUFFER_TENANT_ID, 16, "buffer-tenant-id", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(BUFFER_TENANT_NAME, 18, "buffer-tenant-name", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(BUTTON, 6, "button", TI.KEYWORD);
 		add(BUTTONS, 7, "buttons", TI.KEYWORD);
 		add(BY, 2, "by", TI.KEYWORD | TI.RESERVED);
@@ -631,6 +636,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(ENDROWRESIZE, 14, "end-row-resize", TI.KEYWORD);
 		add(ENTERED, 7, "entered", TI.KEYWORD);
 		add(ENTRY, 5, "entry", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
+        add(ENUM, 4, "enum", TI.KEYWORD);
 		add(EQ, 2, "eq", TI.KEYWORD);
 		add(EQUAL, 0, "", TI.NO_FLAGS);
 		add(ERROR, 5, "error", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
@@ -693,6 +699,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(FIXCHAR, 7, "fixchar", TI.KEYWORD);
 		add(FIXCODEPAGE, 12, "fix-codepage", TI.KEYWORD);
 		add(FIXEDONLY, 10, "fixed-only", TI.KEYWORD);
+        add(FLAGS, 5, "flags", TI.KEYWORD);
 		add(FLATBUTTON, 11, "flat-button", TI.KEYWORD);
 		add(FLOAT, 5, "float", TI.KEYWORD);
 		add(FOCUS, 5, "focus", TI.KEYWORD | TI.RESERVED | TI.SYSHDL);
@@ -746,11 +753,14 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(GETCGILONGVALUE, 18, "get-cgi-long-value", TI.KEYWORD);
 		add(GETCGIVALUE, 13, "get-cgi-value", TI.KEYWORD);
 		add(GETCLASS, 9, "get-class", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
-		add(GETCODEPAGES, 12, "get-codepages", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_NO_ARG_FUNC | TI.MAY_BE_REGULAR_FUNC);
+        add(GETCODEPAGE, 12, "get-codepage", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
+        add(GETCODEPAGES, 13, "get-codepages", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_NO_ARG_FUNC | TI.MAY_BE_REGULAR_FUNC);
 		add(GETCOLLATIONS, 8, "get-collations", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
 		add(GETCONFIGVALUE, 16, "get-config-value", TI.KEYWORD);
 		add(GETDIR, 7, "get-dir", TI.KEYWORD);
 		add(GETDOUBLE, 10, "get-double", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(GET_EFFECTIVE_TENANT_ID, 23, "get-effective-tenant-id", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(GET_EFFECTIVE_TENANT_NAME, 25, "get-effective-tenant-name", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(GETFILE, 8, "get-file", TI.KEYWORD);
 		add(GETFLOAT, 9, "get-float", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(GETINT64, 9, "get-int64", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
@@ -779,6 +789,8 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(HAVING, 6, "having", TI.KEYWORD | TI.RESERVED);
 		add(HEADER, 6, "header", TI.KEYWORD | TI.RESERVED);
 		add(HEIGHT, 6, "height", TI.KEYWORD);
+        add(HEIGHTCHARS, 8, "height-chars", TI.KEYWORD);
+        add(HEIGHTPIXELS, 8, "height-pixels", TI.KEYWORD);
 		add(HELP, 4, "help", TI.KEYWORD | TI.RESERVED);
 		add(HELPTOPIC, 10, "help-topic", TI.KEYWORD);
 		add(HEXDECODE, 10, "hex-decode", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
@@ -839,6 +851,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(ISATTRSPACE, 7, "is-attr-space", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_NO_ARG_FUNC);
 		add(ISCODEPAGEFIXED, 17, "is-codepage-fixed", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(ISCOLUMNCODEPAGE, 18, "is-column-codepage", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(IS_DB_MULTI_TENANT, 18, "is-db-multi-tenant", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(ISLEADBYTE, 7, "is-lead-byte", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
 		add(ISODATE, 8, "iso-date", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(ITEM, 4, "item", TI.KEYWORD);
@@ -929,7 +942,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(MATCHES, 7, "matches", TI.KEYWORD);
 		add(MAXCHARS, 9, "max-chars", TI.KEYWORD);
 		add(MAXIMIZE, 8, "maximize", TI.KEYWORD);
-		add(MAXIMUM, 3, "max", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC | TI.MAY_BE_REGULAR_FUNC);
+		add(MAXIMUM, 3, "max", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(MAXIMUM, 7, "maximum", TI.EXTRA_LITERAL);
 		add(MAXIMUMLEVEL, 13, "maximum-level", TI.KEYWORD);
 		add(MAXROWS, 8, "max-rows", TI.KEYWORD);
@@ -948,7 +961,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(MESSAGELINE, 12, "message-line", TI.KEYWORD);
 		add(MESSAGELINES, 13, "message-lines", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_NO_ARG_FUNC);
 		add(METHOD, 6, "method", TI.KEYWORD);
-		add(MINIMUM, 3, "minimum", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC | TI.MAY_BE_REGULAR_FUNC);
+		add(MINIMUM, 3, "minimum", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(MINSIZE, 8, "min-size", TI.KEYWORD);
 		add(MINUS, 0, "", TI.NO_FLAGS);
 		add(MINVALUE, 7, "min-value", TI.KEYWORD);
@@ -1010,6 +1023,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(NOMAP, 6, "no-map", TI.KEYWORD | TI.RESERVED);
 		add(NOMESSAGE, 6, "no-message", TI.KEYWORD | TI.RESERVED);
 		add(NONE, 4, "none", TI.KEYWORD);
+		add(NON_SERIALIZABLE, 16, "non-serializable", TI.KEYWORD);
 		add(NOPAUSE, 8, "no-pause", TI.KEYWORD | TI.RESERVED);
 		add(NOPREFETCH, 8, "no-prefetch", TI.KEYWORD | TI.RESERVED);
 		add(NORETURNVALUE, 13, "no-return-value", TI.KEYWORD | TI.RESERVED);
@@ -1297,6 +1311,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(SETCONTENTS, 12, "set-contents", TI.KEYWORD);
 		add(SETCURRENTVALUE, 17, "set-current-value", TI.KEYWORD);
 		add(SETDBCLIENT, 13, "set-db-client", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
+		add(SET_EFFECTIVE_TENANT, 20, "set-effective-tenant", TI.KEYWORD | TI.MAY_BE_REGULAR_FUNC);
 		add(SETPOINTERVALUE, 15, "set-pointer-value", TI.KEYWORD);
 		add(SETSIZE, 8, "set-size", TI.KEYWORD);
 		add(SETUSERID, 7, "setuserid", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
@@ -1316,6 +1331,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(SIZEPIXELS, 6, "size-pixels", TI.KEYWORD);
 		add(SKIP, 4, "skip", TI.KEYWORD | TI.RESERVED);
 		add(SKIPDELETEDRECORD, 19, "skip-deleted-record", TI.KEYWORD | TI.RESERVED);
+		add(SKIP_GROUP_DUPLICATES, 21, "skip-group-duplicates", TI.KEYWORD);
 		add(SLASH, 0, "", TI.NO_FLAGS);
 		add(SLIDER, 6, "slider", TI.KEYWORD);
 		add(SMALLINT, 8, "smallint", TI.KEYWORD);
@@ -1387,6 +1403,11 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		add(TARGET, 6, "target", TI.KEYWORD);
 		add(TARGETPROCEDURE, 16, "target-procedure", TI.KEYWORD | TI.SYSHDL);
 		add(TEMPTABLE, 10, "temp-table", TI.KEYWORD);
+		add(TENANT, 6, "tenant", TI.KEYWORD);
+		add(TENANT_ID, 9, "tenant-id", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
+		add(TENANT_NAME, 11, "tenant-name", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
+		add(TENANT_NAME_TO_ID, 17, "tenant-name-to-id", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_REGULAR_FUNC);
+		add(TENANT_WHERE, 12, "tenant-where", TI.KEYWORD);
 		add(TERMINAL, 4, "term", TI.KEYWORD | TI.RESERVED | TI.MAY_BE_NO_ARG_FUNC);
 		add(TERMINAL, 8, "terminal", TI.EXTRA_LITERAL);
 		add(TERMINATE, 9, "terminate", TI.KEYWORD);

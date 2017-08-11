@@ -20,7 +20,7 @@ options {
 
 class ProEval extends TreeParser;
 options {
-	importVocab = ProParser;
+	importVocab = Base;
    	defaultErrorHandler = false;
 }
 
@@ -74,8 +74,8 @@ formitem
 	Object a;
 }
 	:	#(	Form_item
-			(	SKIP		{System.out.println();}
-			|	a=expr		{System.out.println(a);}
+			(	SKIP		{}
+			|	a=expr		{}
 			)
 		)
 	;
@@ -224,6 +224,7 @@ function returns [Object r]
 	|	r=asc_fun
 	|	r=date_fun
 	|	r=day_fun
+    |   r=dbtype_fun
 	|	r=decimal_fun
 	|	r=encode_fun
 	|	r=entry_fun
@@ -232,6 +233,7 @@ function returns [Object r]
 	|	r=fill_fun
 	|	r=index_fun
 	|	r=integer_fun
+    |   r=int64_fun
 	|	r=keyword_fun
 	|	r=keywordall_fun
 	|	r=lc_fun
@@ -303,6 +305,15 @@ day_fun returns [Object ret]
 }
 	:	#(DAY LEFTPAREN a=expr RIGHTPAREN)
 		{if(true) throw new ProEvalException("DAY function not yet supported.");}
+	;
+
+dbtype_fun returns [Object ret]
+{
+	Object a;
+}
+	:	#(DBTYPE LEFTPAREN a=expr RIGHTPAREN)
+		{	ret = "PROGRESS";
+		}
 	;
 
 
@@ -387,6 +398,14 @@ integer_fun returns [Object ret]
 		}
 	;
 
+int64_fun returns [Object ret]
+{
+  Object a;
+}
+  :  #(INT64 LEFTPAREN a=expr RIGHTPAREN)
+    {  ret = integer(a);
+    }
+  ;
 
 keyword_fun returns [Object ret]
 {

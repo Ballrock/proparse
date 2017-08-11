@@ -1,4 +1,5 @@
 /*
+
 proparse.g - Progress parser grammar
 
 
@@ -248,6 +249,7 @@ statement
 	|	callstate  | casestate | catchstate
 	|	choosestate
 	|	classstate
+	| enumstate
 	|	clearstate  | closestatement  | colorstate
 	|	compilestate
 	|	connectstate  
@@ -381,6 +383,11 @@ builtinfunc
 		)
 	|	ADDINTERVAL^ LEFTPAREN expression COMMA expression COMMA expression RIGHTPAREN
 	|	AUDITENABLED^ LEFTPAREN (expression)? RIGHTPAREN
+	| BUFFER_GROUP_ID^ LEFTPAREN ID RIGHTPAREN 
+	| BUFFER_GROUP_NAME^ LEFTPAREN ID RIGHTPAREN 
+	| BUFFER_PARTITION_ID^ LEFTPAREN ID RIGHTPAREN 
+	| BUFFER_TENANT_ID^ LEFTPAREN ID RIGHTPAREN 
+  | BUFFER_TENANT_NAME^ LEFTPAREN ID RIGHTPAREN 
 	|	(AVG LEFTPAREN)=> sqlaggregatefunc  
 	|	CANFIND^<AST=BlockNode> LEFTPAREN (options{greedy=true;}: findwhich)? recordphrase RIGHTPAREN
 	|	CAST^ LEFTPAREN expression COMMA type_name RIGHTPAREN
@@ -402,9 +409,13 @@ builtinfunc
 	|	FRAMEDOWN^ LEFTPAREN widgetname RIGHTPAREN  // also noarg
 	|	FRAMELINE^ LEFTPAREN widgetname RIGHTPAREN  // also noarg
 	|	FRAMEROW^ LEFTPAREN widgetname RIGHTPAREN  // also noarg
+	|	GETCODEPAGE^ funargs  // also noarg
 	|	GETCODEPAGES^ funargs  // also noarg
+	| GET_EFFECTIVE_TENANT_ID^ LEFTPAREN (expression)? RIGHTPAREN 
+	| GET_EFFECTIVE_TENANT_NAME^ LEFTPAREN (expression)? RIGHTPAREN
 	|	GUID^ LEFTPAREN (expression)? RIGHTPAREN
 	|	IF^ expression THEN expression ELSE expression
+	| IS_DB_MULTI_TENANT^ LEFTPAREN (expression)? RIGHTPAREN 
 	|	ldbnamefunc 
 	|	lengthfunc // is also a pseudfn.
 	|	LINECOUNTER^ LEFTPAREN streamname RIGHTPAREN  // also noarg
@@ -420,6 +431,9 @@ builtinfunc
 	|	SEEK^ LEFTPAREN (INPUT|OUTPUT|streamname|STREAMHANDLE expression) RIGHTPAREN // streamname, /not/ stream_name_or_handle.
 	|	substringfunc // is also a pseudfn.
 	|	SUPER^ parameterlist  // also noarg
+	| SET_EFFECTIVE_TENANT^ LEFTPAREN expression (COMMA expression)? RIGHTPAREN 
+	| TENANT_ID^ LEFTPAREN (expression)? RIGHTPAREN
+	| TENANT_NAME^ LEFTPAREN (expression)? RIGHTPAREN
 	|	TIMEZONE^ funargs  // also noarg
 	|	TYPEOF^ LEFTPAREN expression COMMA type_name RIGHTPAREN
 	| GETCLASS^ LEFTPAREN type_name RIGHTPAREN
@@ -547,6 +561,7 @@ argfunc
 		|	SSLSERVERNAME^
 		|	STRING^
 		|	SUBSTITUTE^
+		| TENANT_NAME_TO_ID^
 		|	TOROWID^
 		|	TRIM^
 		|	TRUNCATE^
@@ -825,7 +840,7 @@ exprt2
 		// point in expression evaluation, if we have anything followed by a left-paren,
 		// we're going to assume it's a method call.
 		// Method names which are reserved keywords must be prefixed with THIS-OBJECT:.
-		({support.isClass()}? identifier LEFTPAREN)=>
+    ({support.isClass() && !support.isInDynamicNew()}? identifier LEFTPAREN)=>
 			methodname:identifier!
 			{	#methodname.setType(LOCAL_METHOD_REF);
 				astFactory.makeASTRoot(currentAST, #methodname);
@@ -1007,7 +1022,9 @@ record
 
 blocklabel
 	// Block labels can begin with [#|$|%], which are picked up as FILENAME by the lexer.
-	:	(identifier|FILENAME) {#blocklabel.setType(BLOCK_LABEL);}
+  :  { LT(1).getType() != NodeTypes.FINALLY }?
+     (identifier|FILENAME)
+     {#blocklabel.setType(BLOCK_LABEL);}
 	;
 cursorname
 	:	identifier
@@ -1105,7 +1122,7 @@ systemhandlename
 	|	COMSELF | CURRENTWINDOW | DEBUGGER | DEFAULTWINDOW
 	|	ERRORSTATUS | FILEINFORMATION | FOCUS | FONTTABLE | LASTEVENT | LOGMANAGER
 	|	MOUSE | PROFILER | RCODEINFORMATION | SECURITYPOLICY | SELF | SESSION
-	|	SOURCEPROCEDURE | SUPER | TARGETPROCEDURE | TEXTCURSOR | THISOBJECT | THISPROCEDURE | WEBCONTEXT
+	|	SOURCEPROCEDURE | SUPER | TARGETPROCEDURE | TEXTCURSOR | THISOBJECT | THISPROCEDURE | WEBCONTEXT | ACTIVEFORM
 	;
 
 widgettype
@@ -1401,6 +1418,24 @@ class_type_name
 	|	type_name
 	;
 
+enumstate
+  :  e:ENUM^ type_name2 (FLAGS)? block_colon
+     defenumstate
+     enum_end
+     state_end
+     {sthd(##,0);}
+  ;
+
+defenumstate
+  : DEFINE^ ENUM (enum_member)+ state_end { sthd(##, ENUM); }
+  ;
+
+enum_member
+  :  type_name2 ( EQUAL ( NUMBER | type_name2 (COMMA type_name2)*))?
+  ;
+
+enum_end: END^ (ENUM)? ;
+
 classstate
 	:	c:CLASS^ type_name2
 		(class_inherits | class_implements | USEWIDGETPOOL | ABSTRACT | FINAL | SERIALIZABLE)*
@@ -1524,6 +1559,7 @@ columnformat_opt
 	:	format_expr
 	|	label_constant
 	|	NOLABELS
+  | (HEIGHT^|HEIGHTPIXELS^|HEIGHTCHARS^) NUMBER
 	|	(WIDTH^|WIDTHPIXELS^|WIDTHCHARS^) NUMBER
 	|	COLUMNFONT^ expression
 	|	COLUMNDCOLOR^ expression
@@ -1659,16 +1695,21 @@ copylob_starting
 	:	STARTING^ AT expression
 	;
 		
+fortenant
+	: FOR^ TENANT expression
+	;
+	
 createstatement
 		// "CREATE WIDGET-POOL." truly is ambiguous if you have a table named "widget-pool".
 		// Progress seems to treat this as a CREATE WIDGET-POOL statement rather than a
 		// CREATE table statement. So, we'll resolve it the same way.
 	:	(CREATE WIDGETPOOL state_end)=> createwidgetpoolstate
-	|	(CREATE record (USING|NOERROR_KW|PERIOD|EOF))=> createstate
+	|	(CREATE record (FOR|USING|NOERROR_KW|PERIOD|EOF))=> createstate
 	|	create_whatever_state
 	|	createaliasstate
 	|	createautomationobjectstate
 	|	createbrowsestate
+  | createquerystate
 	|	createbufferstate
 	|	createdatabasestate
 	|	createindexstate
@@ -1683,13 +1724,13 @@ createstatement
 	;
 
 createstate
-	:	CREATE^ record (using_row)? (NOERROR_KW)? state_end
+	:	CREATE^ record (fortenant)? (using_row)? (NOERROR_KW)? state_end
 		{sthd(##,0);}
 	;
 
 create_whatever_state
 	:	CREATE^
-		(CALL|CLIENTPRINCIPAL|DATASET|DATASOURCE|QUERY|SAXREADER|SAXWRITER|SOAPHEADER|SOAPHEADERENTRYREF|XDOCUMENT|XNODEREF)
+    (CALL|CLIENTPRINCIPAL|DATASET|DATASOURCE|SAXREADER|SAXWRITER|SOAPHEADER|SOAPHEADERENTRYREF|XDOCUMENT|XNODEREF)
 		field (in_widgetpool_expr)? (NOERROR_KW)? state_end
 		{sthd(##, ##.firstChild().getType());}
 	;
@@ -1717,8 +1758,16 @@ createbrowsestate
 		{sthd(##,BROWSE);}
 	;
 
+createquerystate
+  :  CREATE^ QUERY exprt
+    (in_widgetpool_expr)?
+    (NOERROR_KW)?
+    state_end
+    {sthd(##,QUERY);}
+  ;
+
 createbufferstate
-	:	CREATE^ BUFFER field FOR TABLE expression
+  :  CREATE^ BUFFER exprt FOR TABLE expression
 		(createbuffer_name)?
 		(in_widgetpool_expr)?
 		(NOERROR_KW)?
@@ -1748,12 +1797,12 @@ createserversocketstate
 	;
 
 createsocketstate
-	:	CREATE^ SOCKET exprt (NOERROR_KW)? state_end
+	:	CREATE^ SOCKET field (NOERROR_KW)? state_end
 		{sthd(##,SOCKET);}
 	;
 
 createtemptablestate
-	:	CREATE^ TEMPTABLE field (in_widgetpool_expr)? (NOERROR_KW)? state_end
+  :  CREATE^ TEMPTABLE exprt (in_widgetpool_expr)? (NOERROR_KW)? state_end
 		{sthd(##,TEMPTABLE);}
 	;
 
@@ -1780,7 +1829,9 @@ createwidgetpoolstate
 	;
 
 currentvaluefunc
-	:	CURRENTVALUE^ LEFTPAREN sequencename (COMMA identifier)? RIGHTPAREN
+	:	CURRENTVALUE^ LEFTPAREN sequencename (COMMA identifier)? // logical name 
+	(COMMA expression)? // multitenant 
+	RIGHTPAREN
 	;
 
 // Basic variable class or primitive datatype syntax.
@@ -1889,6 +1940,8 @@ definestatement
 		|	ABSTRACT
 		|	STATIC
 		|	OVERRIDE
+		| SERIALIZABLE
+		| NON_SERIALIZABLE
 		)*
 		(	definebrowsestate	{sthd(##,BROWSE);}
 		|	definebufferstate	{sthd(##,BUFFER);}
@@ -2435,7 +2488,9 @@ field_equal_dynamic_new
 		e:EQUAL^ dynamic_new {support.attrOp(#e);}
 	;
 dynamic_new
-	:	DYNAMICNEW^ expression parameterlist
+  :  { support.setInDynamicNew(true); }
+  DYNAMICNEW^ expression parameterlist
+  { support.setInDynamicNew(false); }
 	;
 
 editorphrase
@@ -3117,7 +3172,9 @@ nextpromptstate
 	;
 
 nextvaluefunc
-	:	NEXTVALUE^ LEFTPAREN sequencename (COMMA identifier)* RIGHTPAREN
+	:	NEXTVALUE^ LEFTPAREN sequencename (COMMA identifier)? // logical name 
+  (COMMA expression)? // multitenant
+  RIGHTPAREN
 	;
 
 nullphrase
@@ -3480,6 +3537,7 @@ record_opt
 		// (The constant NO-LOCK value is 6209).
 	|	(WHERE (SHARELOCK|EXCLUSIVELOCK|NOLOCK|NOWAIT|NOPREFETCH|NOERROR_KW))=> WHERE^
 	|	WHERE^ (options{greedy=true;}: expression)?
+	| TENANT_WHERE^ expression (SKIP_GROUP_DUPLICATES)?
 	|	USEINDEX^ identifier
 	|	USING^ field (AND field)*
 	|	lockhow
@@ -3515,7 +3573,7 @@ repositionstate
 	;
 reposition_opt
 	:	TO^
-		(	ROWID expression (COMMA expression)* 
+		(	ROWID expression (COMMA expression)* (FOR TENANT expression)?
 		|	RECID expression
 		|	ROW expression
 		)
@@ -4079,7 +4137,7 @@ GE | GENERATEMD5 | GET | GETBITS | GETBYTE | GETBYTES | GETBYTEORDER | GETCGILIS
 GETCGIVALUE | GETCONFIGVALUE | GETDIR | GETDOUBLE | 
 GETFILE | GETFLOAT | GETLICENSE |
 GETLONG | GETPOINTERVALUE | GETSHORT | GETSIZE | GETSTRING | GETUNSIGNEDSHORT | GTHAN | HANDLE | HEIGHT |
-HELPTOPIC | HINT |
+HEIGHTPIXELS | HEIGHTCHARS | HELPTOPIC | HINT |
 HORIZONTAL | HTMLENDOFLINE | HTMLFRAMEBEGIN | HTMLFRAMEEND | HTMLHEADERBEGIN | HTMLHEADEREND | HTMLTITLEBEGIN | 
 HTMLTITLEEND | IMAGE | IMAGEDOWN | IMAGEINSENSITIVE | IMAGESIZE | IMAGESIZECHARS | IMAGESIZEPIXELS | 
 IMAGEUP | INCREMENTEXCLUSIVEID | INDEXHINT | INDEXEDREPOSITION | INFORMATION | INITIAL | INITIALDIR | 
@@ -4159,7 +4217,7 @@ STATIC | THROW | TOPNAVQUERY | UNBOX
 // 10.2B
 ABSTRACT | DELEGATE | DYNAMICNEW | EVENT | FOREIGNKEYHIDDEN | SERIALIZEHIDDEN | SERIALIZENAME | SIGNATURE | STOPAFTER |
 // 11+
-GETCLASS | SERIALIZABLE | TABLESCAN | MESSAGEDIGEST
+GETCLASS | SERIALIZABLE | TABLESCAN | MESSAGEDIGEST | ENUM | FLAGS | NON_SERIALIZABLE  | TENANT
 	;
 
 
@@ -4183,7 +4241,8 @@ reservedkeyword:
  | FINDSELECT | FINDWRAPAROUND | FIRST | FIRSTOF | FOCUS | FONT | FOR | FORMAT | FRAME 
  | FRAMECOL | FRAMEDB | FRAMEDOWN | FRAMEFIELD | FRAMEFILE | FRAMEINDEX | FRAMELINE 
  | FRAMENAME | FRAMEROW | FRAMEVALUE | FROM | FUNCTIONCALLTYPE | GETATTRCALLTYPE 
- | GETBUFFERHANDLE | GETCODEPAGES | GETCOLLATIONS | GETKEYVALUE | GLOBAL | GOON 
+ | GETBUFFERHANDLE | GETCODEPAGE | GETCODEPAGES | GETCOLLATIONS 
+ | GET_EFFECTIVE_TENANT_ID | GET_EFFECTIVE_TENANT_NAME | GETKEYVALUE | GLOBAL | GOON 
  | GOPENDING | GRANT | GRAPHICEDGE | GROUP | HAVING | HEADER | HELP | HIDE 
  | HOSTBYTEORDER | IF | IMPORT | INDEX | INDICATOR | INPUT | INPUTOUTPUT | INSERT 
  | INTO | IN_KW | IS | ISATTRSPACE | ISLEADBYTE | JOIN | KBLABEL | KEYS | KEYWORD 
@@ -4206,10 +4265,10 @@ reservedkeyword:
  | SAXRUNNING | SAXUNINITIALIZED | SAXWRITEBEGIN | SAXWRITECOMPLETE | SAXWRITECONTENT 
  | SAXWRITEELEMENT | SAXWRITEERROR | SAXWRITEIDLE | SAXWRITETAG | SCHEMA | SCREEN 
  | SCREENIO | SCREENLINES | SCROLL | SDBNAME | SEARCH | SEARCHSELF | SEARCHTARGET 
- | SECURITYPOLICY | SEEK | SELECT | SELF | SESSION | SET | SETATTRCALLTYPE | SETUSERID 
+ | SECURITYPOLICY | SEEK | SELECT | SELF | SESSION | SET | SETATTRCALLTYPE | SET_EFFECTIVE_TENANT | SETUSERID 
  | SHARED | SHARELOCK | SHOWSTATS | SKIP | SKIPDELETEDRECORD | SOME | SPACE | STATUS 
  | STOMPDETECTION | STOMPFREQUENCY | STREAM | STREAMHANDLE | STREAMIO | SYSTEMDIALOG 
- | TABLE | TABLEHANDLE | TABLENUMBER | TERMINAL | TEXT | THEN | THISOBJECT 
+ | TABLE | TABLEHANDLE | TABLENUMBER | TENANT_ID | TENANT_NAME | TENANT_NAME_TO_ID | TERMINAL | TEXT | THEN | THISOBJECT 
  | THISPROCEDURE | TIME | TITLE | TO | TOPONLY | TOROWID | TRANSACTION | TRIGGER 
  | TRIGGERS | TRIM | TRUE_KW | UNDERLINE | UNDO | UNFORMATTED | UNION | UNIQUE | UNIX 
  | UNLESSHIDDEN | UP | UPDATE | USEINDEX | USERID | USING | V6FRAME | VALUE 

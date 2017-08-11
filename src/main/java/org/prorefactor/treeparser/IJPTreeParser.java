@@ -27,7 +27,7 @@ public interface IJPTreeParser {
 	/**
 	 * The starting point for parsing a tree.
 	 * You don't have to worry about this one - it is generated automatically
-	 * if your grammar "extends" JPTreeParser.g.
+	 * if your grammar "extends" JPTreeParserCust.g.
 	 */
 	public void program(AST _t) throws RecognitionException;
 
@@ -35,7 +35,7 @@ public interface IJPTreeParser {
 	/**
 	 * Get the (hopefully) last node where the tree parser left off before
 	 * it died with an exception.
-	 * See JPTreeParser for an implementation of this (it needs to be
+	 * See JPTreeParserCust for an implementation of this (it needs to be
 	 * copied and pasted into your own tree parser's .g grammar file).
 	 */
 	public AST get_retTree();

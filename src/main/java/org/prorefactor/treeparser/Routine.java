@@ -79,7 +79,7 @@ public class Routine extends Symbol {
 	public Routine setProgressType(int t) { progressType=t; return this; }
 
 	
-	/** Set by TreeParser01 for functions and methods. */
+	/** Set by TreeParser01Cust for functions and methods. */
 	public void setReturnDatatypeNode(JPNode n) {this.returnDatatypeNode = n;}
 
 

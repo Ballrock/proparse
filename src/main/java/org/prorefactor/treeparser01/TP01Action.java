@@ -22,9 +22,9 @@ import org.prorefactor.widgettypes.Browse;
 import antlr.collections.AST;
 
 
-/** Superclass of empty actions methods for TreeParser01.
+/** Superclass of empty actions methods for TreeParser01Cust.
  * Subclasses can override and implement any of these methods,
- * which are all called directly by TreeParser01.
+ * which are all called directly by TreeParser01Cust.
  * TP01Support is the default implementation.
  */
 public class TP01Action {

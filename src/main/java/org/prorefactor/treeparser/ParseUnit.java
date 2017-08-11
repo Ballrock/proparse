@@ -31,13 +31,13 @@ import org.prorefactor.refactor.PUB;
 import org.prorefactor.refactor.RefactorException;
 import org.prorefactor.refactor.RefactorSession;
 import org.prorefactor.treeparser01.TP01Action;
-import org.prorefactor.treeparser01.TreeParser01;
+import org.prorefactor.treeparser01.TreeParser01Cust;
 
 import com.joanju.proparse.DoParse;
 
 
 /** Provides parse unit information, such as the symbol table and a reference to the AST.
- * TreeParser01 calls symbolUsage() in this class in order to build the symbol table.
+ * TreeParser01Cust calls symbolUsage() in this class in order to build the symbol table.
  */
 public class ParseUnit {
 
@@ -69,8 +69,8 @@ public class ParseUnit {
 	public File getFile() {
 		if (file==null) {
 			// A lot of old code starts with a string filename, sends that to Proparse, gets the top node
-			// handle, builds JPNode, and then runs TreeParser01 from that. (All the stuff ParseUnit does
-			// now.) In those cases, this ParseUnit might have been created as an empty shell by TreeParser01
+			// handle, builds JPNode, and then runs TreeParser01Cust from that. (All the stuff ParseUnit does
+			// now.) In those cases, this ParseUnit might have been created as an empty shell by TreeParser01Cust
 			// itself, and "file" would not be set. In that case, we attempt to find the File from the file index.
 			if (topNode==null) return null;
 			file = new File(topNode.getFilenames()[0]);
@@ -144,8 +144,8 @@ public class ParseUnit {
 
 
 	/** Load from PUB, or build PUB if it's out of date.
-	 * TreeParser01 is run in order to build the PUB.
-	 * If the PUB was up to date, then TreeParser01 is run
+	 * TreeParser01Cust is run in order to build the PUB.
+	 * If the PUB was up to date, then TreeParser01Cust is run
 	 * after the PUB is loaded. (Either way, the symbol tables
 	 * etc. are available.)
 	 */
@@ -217,23 +217,23 @@ public class ParseUnit {
 	}
 
 
-	/** Run TreeParser01.
+	/** Run TreeParser01Cust.
 	 * Takes care of calling parse() first, if that has not already been done.
 	 */
 	public void treeParser01() throws RefactorException {
 		if (this.getTopNode()==null) parse();
-		TreeParser01 tp = new TreeParser01();
+		TreeParser01Cust tp = new TreeParser01Cust();
 		tp.getActionObject().setParseUnit(this);
 		treeParser(tp);
 	}
 
 
-	/** Run TreeParser01 with any TP01Action object.
+	/** Run TreeParser01Cust with any TP01Action object.
 	 * Takes care of calling parse() first, if that has not already been done.
 	 */
 	public void treeParser01(TP01Action action) throws RefactorException {
 		if (this.getTopNode()==null) parse();
-		TreeParser01 tp = new TreeParser01();
+		TreeParser01Cust tp = new TreeParser01Cust();
 		tp.setActionObject(action);
 		action.setParseUnit(this);
 		treeParser(tp);

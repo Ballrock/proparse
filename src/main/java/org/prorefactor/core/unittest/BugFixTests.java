@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.prorefactor.refactor.RefactorSession;
 import org.prorefactor.treeparser.ParseUnit;
-import org.prorefactor.treeparserbase.JPTreeParser;
+import org.prorefactor.treeparserbase.JPTreeParserCust;
 
 
 /** Test the tree parsers against problematic syntax.
@@ -48,7 +48,7 @@ public class BugFixTests extends TestCase {
 			System.out.println("Parse: " + file.getAbsolutePath());
 			ParseUnit pu = new ParseUnit(file);
 			pu.parse();
-			pu.treeParser(new JPTreeParser());
+			pu.treeParser(new JPTreeParserCust());
 			pu.treeParser01();
 		}
 	}
