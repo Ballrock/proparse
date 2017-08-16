@@ -1404,9 +1404,9 @@ definebuttonstate
 
 definedatasetstate
 	:	#(	DEFINE (def_shared)? def_modifiers DATASET ID
-			(namespace_uri)? (namespace_prefix)? (xml_node_name)?
-			( #(SERIALIZENAME QSTRING) )?
-			(SERIALIZEHIDDEN)?
+			(namespace_uri)? (namespace_prefix)?
+			(xml_node_name)? (serialize_name)?
+			(xml_node_type)? (SERIALIZEHIDDEN)?
 			(REFERENCEONLY)?
 			FOR RECORD_NAME (COMMA RECORD_NAME)*
 			( data_relation ( (COMMA)? data_relation)* )?
@@ -1605,8 +1605,8 @@ definesubmenustate
 definetemptablestate
 	:	#(	DEFINE (def_shared)? def_modifiers TEMPTABLE ID
 			(UNDO|NOUNDO)?
-			(namespace_uri)? (namespace_prefix)? (xml_node_name)?
-			( #(SERIALIZENAME QSTRING) )?
+			(namespace_uri)? (namespace_prefix)?
+			(xml_node_name)? (serialize_name)?
 			(REFERENCEONLY)?
 			(def_table_like)?
 			(label_constant)?
@@ -1804,7 +1804,7 @@ fieldoption
 	|	xml_data_type
 	|	xml_node_name
 	|	xml_node_type
-	|	#(SERIALIZENAME QSTRING)
+	|	serialize_name
 	|	SERIALIZEHIDDEN
 	;
 
@@ -2843,9 +2843,8 @@ widget_id: #(WIDGETID expression ) ;
 
 xml_data_type: #(XMLDATATYPE constant ) ;
 xml_node_name: #(XMLNODENAME constant ) ;
+serialize_name: #(SERIALIZENAME constant ) ;
 xml_node_type: #(XMLNODETYPE constant ) ;
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Begin SQL

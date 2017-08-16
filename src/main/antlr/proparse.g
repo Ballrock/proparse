@@ -2048,8 +2048,9 @@ button_opt
 
 definedatasetstate
 	:	DATASET identifier
-		(namespace_uri)? (namespace_prefix)? (xml_node_name)? (serialize_name)?
-		(SERIALIZEHIDDEN)?
+		(namespace_uri)? (namespace_prefix)?
+		(xml_node_name)? (serialize_name)?
+		(xml_node_type)? (SERIALIZEHIDDEN)?
 		(REFERENCEONLY)?
 		FOR record (COMMA record)*
 		(data_relation ( (COMMA)? data_relation)* )?
@@ -2273,7 +2274,8 @@ definetemptablestate
 			support.defTable(tableName, SymbolScope.FieldType.TTABLE);
 		}
 		(UNDO|NOUNDO)?
-		(namespace_uri)? (namespace_prefix)? (xml_node_name)? (serialize_name)?
+		(namespace_uri)? (namespace_prefix)?
+		(xml_node_name)? (serialize_name)?
 		(REFERENCEONLY)?
 		(def_table_like)?
 		(label_constant)?
@@ -3686,10 +3688,6 @@ selectionlist_opt
 	|	sizephrase
 	;
 
-serialize_name
-	:	SERIALIZENAME^ QSTRING
-	;
-
 setstate
 	:	SET^ (options{greedy=true;}: stream_name_or_handle)? (UNLESSHIDDEN)? form_items_or_record
 		(goonphrase)?
@@ -4095,7 +4093,7 @@ widget_id: WIDGETID^ expression ;
 xml_data_type: XMLDATATYPE^ constant ;
 xml_node_name: XMLNODENAME^ constant ;
 xml_node_type: XMLNODETYPE^ constant ;
-
+serialize_name: SERIALIZENAME^ constant ;
 
 // Documentation bugs:
 // - PARENT, ROWID, and RETURNS can be used as field names
