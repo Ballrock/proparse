@@ -170,6 +170,7 @@ statement
 	|						casestate
 	|						catchstate
 	|						choosestate
+  	|            			enumstate
 	|						classstate
 	|						clearstate
 	|	{state2(_t, 0)}?			closestate			// SQL
@@ -191,7 +192,7 @@ statement
 	|	{state2(_t, DATASET)}?			createdatasetstate
 	|	{state2(_t, DATASOURCE)}?		createdatasourcestate
 	|	{state2(_t, INDEX)}?			createindexstate		// SQL
-	|	{state2(_t, QUERY)}?			createquerystate   
+	|	{state2(_t, QUERY)}?			createquerystate
 	|	{state2(_t, SAXREADER)}?		createsaxreaderstate
 	|	{state2(_t, SAXWRITER)}?		createsaxwriterstate
 	|	{state2(_t, SERVER)}?			createserverstate
@@ -212,7 +213,7 @@ statement
 	|	{state2(_t, INITIATE)}?		ddeinitiatestate
 	|	{state2(_t, REQUEST)}?		dderequeststate
 	|	{state2(_t, SEND)}?			ddesendstate
-	|	{state2(_t, TERMINATE)}?		ddeterminatestate	
+	|	{state2(_t, TERMINATE)}?		ddeterminatestate
 	|						declarecursorstate
 	|	{state2(_t, BROWSE)}?			definebrowsestate
 	|	{state2(_t, BUFFER)}?			definebufferstate
@@ -251,7 +252,7 @@ statement
 	|	{state2(_t, TABLE)}?			droptablestate			// SQL
 	|	{state2(_t, VIEW)}?			dropviewstate			// SQL
 	|						dynamicnewstate
-	|						emptytemptablestate  
+	|						emptytemptablestate
 	|						enablestate
 	|						exportstate
 	|						fetchstate
@@ -261,11 +262,11 @@ statement
 	|						formstate
 	|						functionstate
 	|						getstate
-	|						getkeyvaluestate  
+	|						getkeyvaluestate
 	|						grantstate
 	|						hidestate
 	|						ifstate
-	|						importstate  
+	|						importstate
 	|	{state2(_t, CLEAR)}?			inputclearstate
 	|	{state2(_t, CLOSE)}?			inputclosestate
 	|	{state2(_t, FROM)}?			inputfromstate
@@ -276,24 +277,24 @@ statement
 	|	{state2(_t, 0)}?			insertstate
 	|						interfacestate
 	|						leavestate
-	|						loadstate  
+	|						loadstate
 	|						messagestate
 	|						methodstate
 	|						nextstate
 	|						nextpromptstate
-	|						onstate  
+	|						onstate
 	|	{state2(_t, 0)}?			openstate			// SQL
 	|	{state2(_t, QUERY)}?			openquerystate
 	|						osappendstate
 	|						oscommandstate
 	|						oscopystate
-	|						oscreatedirstate  
+	|						oscreatedirstate
 	|						osdeletestate
 	|						osrenamestate
 	|	{state2(_t, CLOSE)}?			outputclosestate
 	|	{state2(_t, THROUGH)}?		outputthroughstate
 	|	{state2(_t, TO)}?			outputtostate
-	|						pagestate  
+	|						pagestate
 	|						pausestate
 	|						procedurestate
 	|						processeventsstate
@@ -310,7 +311,7 @@ statement
 	|	{state2(_t, EXTERNAL)}?		releaseexternalstate
 	|	{state2(_t, OBJECT)}?			releaseobjectstate
 	|						repeatstate
-	|						repositionstate  
+	|						repositionstate
 	|						returnstate
 	|						revokestate
 	|						routinelevelstate
@@ -320,11 +321,11 @@ statement
 	|	{state2(_t, SUPER)}?			runsuperstate
 	|						savecachestate
 	|						scrollstate
-	|						seekstate  
+	|						seekstate
 	|						selectstate
 	|						setstate
 	|						showstatsstate
-	|						statusstate  
+	|						statusstate
 	|						stopstate
 	|						subscribestate
 	|	{state2(_t, COLOR)}?			systemdialogcolorstate
@@ -336,11 +337,11 @@ statement
 	|						thisobjectstate
 	|						transactionmodeautomaticstate
 	|						triggerprocedurestate
-	|						underlinestate  
+	|						underlinestate
 	|						undostate
 	|						unloadstate
 	|						unsubscribestate
-	|						upstate  
+	|						upstate
 	|						updatestatement
 	|						usestate
 	|						usingstate
@@ -394,7 +395,7 @@ pseudfn
 	| PROGRESS | FRAMEINDEX | FRAMEDB | FRAMENAME | DATASERVERS
 	| NUMDBS | NUMALIASES | ISATTRSPACE | PROCSTATUS
 	| PROCHANDLE | CURSOR | OSERROR | RETURNVALUE | OSDRIVES
-	| PROVERSION | TRANSACTION | MACHINECLASS 
+	| PROVERSION | TRANSACTION | MACHINECLASS
 	| AAPCONTROL | GETCODEPAGES | COMSELF
 	;
 
@@ -419,7 +420,7 @@ functioncall
 	|	#(GETCODEPAGES (funargs)? )
 	|	#(GUID LEFTPAREN (expression)? RIGHTPAREN )
 	|	#(IF expression THEN expression ELSE expression )
-	|	ldbnamefunc 
+	|	ldbnamefunc
 	|	lengthfunc // is also a pseudfn.
 	|	#(LINECOUNTER (LEFTPAREN ID RIGHTPAREN)? )
 	|	#(MTIME (funargs)? )
@@ -436,7 +437,7 @@ functioncall
 	| #(GETCLASS LEFTPAREN TYPE_NAME RIGHTPAREN )
 	|	#(USERID (funargs)? )
 	|	#(USER (funargs)? )
-	|	sqlaggregatefunc  
+	|	sqlaggregatefunc
 	|	argfunc
 	|	noargfunc
 	|	recordfunc
@@ -608,6 +609,7 @@ noargfunc
 	|	GENERATEPBESALT
 	|	GENERATERANDOMKEY
 	|	GENERATEUUID
+  	|  GETCODEPAGES
 	|	GATEWAYS
 	|	GOPENDING
 	|	ISATTRSPACE
@@ -805,11 +807,11 @@ constant
 	;
 
 systemhandlename
-	:	AAMEMORY | ACTIVEWINDOW | AUDITCONTROL | AUDITPOLICY | CLIPBOARD | CODEBASELOCATOR | COLORTABLE | COMPILER 
+	:	AAMEMORY | ACTIVEWINDOW | AUDITCONTROL | AUDITPOLICY | CLIPBOARD | CODEBASELOCATOR | COLORTABLE | COMPILER
 	|	COMSELF | CURRENTWINDOW | DEBUGGER | DEFAULTWINDOW
 	|	ERRORSTATUS | FILEINFORMATION | FOCUS | FONTTABLE | LASTEVENT | LOGMANAGER
 	|	MOUSE | PROFILER | RCODEINFORMATION | SECURITYPOLICY | SELF | SESSION
-	|	SOURCEPROCEDURE | SUPER | TARGETPROCEDURE | TEXTCURSOR | THISOBJECT | THISPROCEDURE | WEBCONTEXT
+  	|  SOURCEPROCEDURE | SUPER | TARGETPROCEDURE | TEXTCURSOR | THISOBJECT | THISPROCEDURE | WEBCONTEXT | ACTIVEFORM
 	;
 
 
@@ -942,7 +944,7 @@ buffercopystate
 			( #(ASSIGN assignment_list ) )?
 			(NOLOBS)?
 			(NOERROR_KW)?
-			state_end 
+			state_end
 		)
 	;
 
@@ -980,17 +982,33 @@ case_expression
 choosestate
 	:	#(	CHOOSE (ROW|FIELD)
 			( #(Form_item field (#(HELP constant))? ) )+
-			(	AUTORETURN 
-			|	#(COLOR anyorvalue) 
+			(	AUTORETURN
+			|	#(COLOR anyorvalue)
 			|	goonphrase
 			|	#(KEYS field )
-			|	NOERROR_KW 
+			|	NOERROR_KW
 			|	#(PAUSE expression)
 			)*
 			(framephrase)?
 			state_end
 		)
 	;
+
+enumstate
+  :  #(  ENUM TYPE_NAME (FLAGS)? block_colon
+      defenumstate
+      #(END (ENUM)? )
+      state_end
+     )
+  ;
+
+defenumstate
+  :  #( DEFINE ENUM (enum_member)+ state_end )
+  ;
+
+enum_member
+  : TYPE_NAME ( EQUAL ( NUMBER | TYPE_NAME (COMMA TYPE_NAME)*))?
+  ;
 
 classstate
 	:	#(	CLASS TYPE_NAME
@@ -1068,10 +1086,13 @@ columnformat
 			|	#(LABELBGCOLOR expression )
 			|	#(LABELFGCOLOR expression )
 			|	#(LEXAT field (columnformat)? )
+      		|  #(HEIGHT NUMBER )
+      		|  #(HEIGHTPIXELS NUMBER )
+      		|  #(HEIGHTCHARS NUMBER )
 			|	#(WIDTH NUMBER )
 			|	#(WIDTHPIXELS NUMBER )
 			|	#(WIDTHCHARS NUMBER )
-			)+ 
+			)+
 		)
 	;
 
@@ -1133,20 +1154,20 @@ compile_append
 connectstate
 	:	#(CONNECT (NOERROR_KW|DDE|filenameorvalue)* state_end )
 	;
-	
+
 constructorstate
 	:	#(	CONSTRUCTOR def_modifiers TYPE_NAME function_params
 			block_colon code_block #(END (CONSTRUCTOR|METHOD)? ) state_end
 		)
 	;
-	
+
 convertphrase
-	:	#(	CONVERT 
+	:	#(	CONVERT
 			( #(SOURCE (BASE64 | CODEPAGE expression (BASE64)?) ) )?
 			( #(TARGET (BASE64 | CODEPAGE expression (BASE64)?) ) )?
 		)
 	;
-	
+
 copylobstate
 	:	#(	COPYLOB (FROM)?
 			( FILE expression | (OBJECT)? expression )
@@ -1183,7 +1204,7 @@ createbrowsestate
 	;
 
 createbufferstate
-	:	#(	CREATE BUFFER field FOR TABLE expression
+  	:  #(  CREATE BUFFER (field | widattr) FOR TABLE expression
 			( #(BUFFERNAME expression) )?
 			(#(IN_KW WIDGETPOOL expression))?
 			(NOERROR_KW)? state_end
@@ -1199,7 +1220,7 @@ createclientprincipalstate
 	;
 
 createdatabasestate
-	:	#(	CREATE DATABASE expression 
+	:	#(	CREATE DATABASE expression
 			( #(FROM expression (NEWINSTANCE)? ) )?
 			(REPLACE)? (NOERROR_KW)? state_end
 		)
@@ -1246,7 +1267,7 @@ createsocketstate
 	;
 
 createtemptablestate
-	:	#(CREATE TEMPTABLE field (#(IN_KW WIDGETPOOL expression))? (NOERROR_KW)? state_end )
+  	:  #(CREATE TEMPTABLE (field | widattr) (#(IN_KW WIDGETPOOL expression))? (NOERROR_KW)? state_end )
 	;
 
 createwidgetstate

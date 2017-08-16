@@ -528,10 +528,13 @@ columnformat
 			|	#(LABELBGCOLOR expression )
 			|	#(LABELFGCOLOR expression )
 			|	#(LEXAT af:fld[CQ.SYMBOL] {action.lexat(#af);} (columnformat)? )
+      		|  #(HEIGHT NUMBER )
+      		|  #(HEIGHTPIXELS NUMBER )
+      		|  #(HEIGHTCHARS NUMBER )
 			|	#(WIDTH NUMBER )
 			|	#(WIDTHPIXELS NUMBER )
 			|	#(WIDTHCHARS NUMBER )
-			)+ 
+			)+
 		)
 	;
 
@@ -543,7 +546,7 @@ constructorstate
 			{action.structorEnd(#c);}
 		)
 	;
-	
+
 createstate
 	:	#(CREATE tbl[CQ.UPDATING] (#(USING (ROWID|RECID) expression))? (NOERROR_KW)? state_end )
 	;
@@ -561,7 +564,7 @@ createbrowsestate
 	;
 
 createbufferstate
-	:	#(	CREATE BUFFER fld[CQ.UPDATING] FOR TABLE expression
+  	:  #(  CREATE BUFFER (fld[CQ.UPDATING] | widattr) FOR TABLE expression
 			( #(BUFFERNAME expression) )?
 			(#(IN_KW WIDGETPOOL expression))?
 			(NOERROR_KW)? state_end
@@ -581,7 +584,7 @@ createsocketstate
 	;
 
 createtemptablestate
-	:	#(CREATE TEMPTABLE fld[CQ.UPDATING] (#(IN_KW WIDGETPOOL expression))? (NOERROR_KW)? state_end )
+  	:  #(CREATE TEMPTABLE (fld[CQ.UPDATING] | widattr) (#(IN_KW WIDGETPOOL expression))? (NOERROR_KW)? state_end )
 	;
 
 createwidgetstate
