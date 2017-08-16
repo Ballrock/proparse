@@ -355,7 +355,7 @@ public class ParserSupport {
 	}
 
 
-	/* Called by ProParserCust at the *end* of the parse. */
+	/* Called by ProParser at the *end* of the parse. */
 	void setTopNode(JPNode refTopNode) { topNode = refTopNode; }
 
 

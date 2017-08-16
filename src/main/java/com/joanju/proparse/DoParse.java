@@ -40,7 +40,7 @@ public class DoParse {
 	int nextNodeNum;
 	BufferedReader inStream;
 	private Environment env = Environment.instance();
-	ProParserCust parser;
+	ProParser parser;
 	String fileName;
 	TokenVectorIterator tvi;
 
@@ -131,7 +131,7 @@ public class DoParse {
 			}
 
 			// Create the parser, with the filter as the input.
-			parser = new ProParserCust(filter);
+			parser = new ProParser(filter);
 			parser.init(this);
 
 			if (justLex) {
@@ -162,11 +162,11 @@ public class DoParse {
 			// - just doing a regular parse
 			if (proEval) {
 				parser.program();
-				ProEvalCust proEval = new ProEvalCust();
+				ProEval proEval = new ProEval();
 				proEval.program(parser.getAST());
 			} else if (preProcessCondition) {
 				parser.expression();
-				ProEvalCust proEval = new ProEvalCust();
+				ProEval proEval = new ProEval();
 				preProcessConditionResult = proEval.preproIfEval(parser.getAST());
 			} else {
 				parser.program();

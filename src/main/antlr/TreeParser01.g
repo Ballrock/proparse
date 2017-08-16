@@ -52,6 +52,21 @@ options {
 // This is added to top of the class definitions
 {
 
+    @Override
+    public void traceIn(String s, AST ast) {
+        //super.traceIn(s, ast);
+    }
+
+    @Override
+    public void traceOut(String s, AST ast) {
+        //super.traceOut(s, ast);
+    }
+
+    @Override
+    public void traceIndent() {
+        //super.traceIndent();
+    }
+
 	// --- The following are required in all tree parsers ---
 
 	// Where did the tree parser leave off parsing -- might give us at least a bit

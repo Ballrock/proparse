@@ -65,6 +65,21 @@ options {
 // This is added to top of the class definitions
 {
 
+    @Override
+    public void traceIndent() {
+        //super.traceIndent();
+    }
+
+    @Override
+    public void traceIn(String s, AST ast) {
+        //super.traceIn(s, ast);
+    }
+
+    @Override
+    public void traceOut(String s, AST ast) {
+        //super.traceOut(s, ast);
+    }
+
 	// Where did the tree parser leave off parsing -- might give us at least a bit
 	// of an idea where things left off if an exception was thrown.
 	// See antlr/TreeParser and the generated code.

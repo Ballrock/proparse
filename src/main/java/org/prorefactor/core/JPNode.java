@@ -126,7 +126,7 @@ public class JPNode extends BaseAST implements IJPNode, Xferable {
 	 */
 	private static final int FIELD_CONTAINER = -217;
 	/** A valid value for setLink() and getLink().
-	 * A link to a Call object, set by TreeParser01Cust.
+	 * A link to a Call object, set by TreeParser01.
 	 */
 	private static final int CALL = -218;
 	/** A value for setLink() and getLink().
@@ -399,7 +399,7 @@ public class JPNode extends BaseAST implements IJPNode, Xferable {
 	}
 
 
-	/** Some nodes like RUN, USER_FUNC, LOCAL_METHOD_REF have a Call object linked to them by TreeParser01Cust. */
+	/** Some nodes like RUN, USER_FUNC, LOCAL_METHOD_REF have a Call object linked to them by TreeParser01. */
 	public Call getCall() { return (Call) getLink(CALL); }
 
 
@@ -468,7 +468,7 @@ public class JPNode extends BaseAST implements IJPNode, Xferable {
 
 
 	/** Get the FieldContainer (Frame or Browse) for a statement head node or a frame field reference.
-	 * This value is set by TreeParser01Cust.
+	 * This value is set by TreeParser01.
 	 * Head nodes for statements with the [WITH FRAME | WITH BROWSE] option have this value set.
 	 * Is also available on the Field_ref node for #(Field_ref INPUT ...) and for #(USING #(Field_ref...)...).
 	 */
@@ -610,7 +610,7 @@ public class JPNode extends BaseAST implements IJPNode, Xferable {
 	public int getSubtypeIndex() { return 1; }
 
 
-	/** Certain nodes will have a link to a Symbol, set by TreeParser01Cust. */
+	/** Certain nodes will have a link to a Symbol, set by TreeParser01. */
 	public Symbol getSymbol() { return (Symbol) getLink(SYMBOL); }
 
 
@@ -738,7 +738,7 @@ public class JPNode extends BaseAST implements IJPNode, Xferable {
 	}
 
 
-	/** Some nodes like RUN, USER_FUNC, LOCAL_METHOD_REF have a Call object linked to them by TreeParser01Cust. */
+	/** Some nodes like RUN, USER_FUNC, LOCAL_METHOD_REF have a Call object linked to them by TreeParser01. */
 	public void setCall(Call call) { setLink(CALL, call); }
 
 

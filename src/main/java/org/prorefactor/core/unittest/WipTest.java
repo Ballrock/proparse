@@ -7,7 +7,7 @@ import org.prorefactor.core.TokenTypes;
 import org.prorefactor.refactor.RefactorException;
 import org.prorefactor.refactor.RefactorSession;
 import org.prorefactor.treeparser.ParseUnit;
-import org.prorefactor.treeparserbase.JPTreeParserCust;
+import org.prorefactor.treeparserbase.JPTreeParser;
 
 import com.joanju.proparse.DoParse;
 
@@ -29,7 +29,7 @@ public class WipTest extends TestCase {
 			if (treeparsers) {
 				ParseUnit pu = new ParseUnit(file);
 				pu.parse();
-				pu.treeParser(new JPTreeParserCust());
+				pu.treeParser(new JPTreeParser());
 				pu.treeParser01();
 			}
 			else {

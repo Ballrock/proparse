@@ -15,13 +15,30 @@ package com.joanju.proparse;
 import static com.joanju.proparse.ProEvalSupport.*;
 }
 
-options {
-}
-
 class ProEval extends TreeParser;
+
 options {
 	importVocab = Base;
    	defaultErrorHandler = false;
+}
+
+{
+
+    @Override
+    public void traceIn(String s, AST ast) {
+        //super.traceIn(s, ast);
+    }
+
+    @Override
+    public void traceOut(String s, AST ast) {
+        //super.traceOut(s, ast);
+    }
+
+    @Override
+    public void traceIndent() {
+        //super.traceIndent();
+    }
+
 }
 
 

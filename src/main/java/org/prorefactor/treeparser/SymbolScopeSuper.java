@@ -43,7 +43,7 @@ public class SymbolScopeSuper extends SymbolScopeRoot {
 		}
 	}
 	
-	/** TreeParser01Cust stores and looks up SymbolScopeSuper objects in this cache, which
+	/** TreeParser01 stores and looks up SymbolScopeSuper objects in this cache, which
 	 * by default is a synchronizedMap wrapped org.prorefactor.util.Cache object
 	 * with a maximum cache size of 100. It is safe for any application to completely
 	 * override this. (Well, of course, be careful that you provide some mechanism

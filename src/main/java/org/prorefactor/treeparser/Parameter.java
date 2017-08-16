@@ -38,16 +38,16 @@ public class Parameter {
 	 */
 	public Symbol getSymbol() {return symbol;}
 
-	/** Set by TreeParser01Cust. */
+	/** Set by TreeParser01. */
 	public void setBind(boolean bind) {this.bind = bind;}
 
-	/** Set by TreeParser01Cust. */
+	/** Set by TreeParser01. */
 	public void setDirectionNode(JPNode directionNode) {this.directionNode = directionNode;}
 
-	/** Set by TreeParser01Cust. */
+	/** Set by TreeParser01. */
 	public void setProgressType(int progressType) {this.progressType = progressType;}
 
-	/** Set by TreeParser01Cust. */
+	/** Set by TreeParser01. */
 	public void setSymbol(Symbol symbol) {this.symbol = symbol;}
 	
 

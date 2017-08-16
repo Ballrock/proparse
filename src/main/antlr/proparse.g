@@ -46,6 +46,22 @@ options {
 
 // Additional methods and members.
 {
+
+    @Override
+    public void traceIndent() {
+        //super.traceIndent();
+    }
+
+    @Override
+    public void traceIn(String s) throws TokenStreamException {
+        //super.traceIn(s);
+    }
+
+    @Override
+    public void traceOut(String s) throws TokenStreamException {
+        //super.traceOut(s);
+    }
+
 	private boolean schemaTablePriority = false;
 	public ParserSupport support;
 	public DoParse doParse;
@@ -64,7 +80,6 @@ options {
 	void copyHiddenBefore(JPNode from, JPNode to) {
 		to.setHiddenBefore(from.getHiddenBefore());
 	}
-
 
 	/** Override antlr parser getFilename(). */
 	@Override

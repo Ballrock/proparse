@@ -44,9 +44,9 @@ public interface IConstants {
 	 * For attribute key "storetype", this attribute value
 	 * indicates that the reference is to a local variable within the
 	 * 4gl compile unit.
-	 * This node attribute is set by TreeParser01Cust.
+	 * This node attribute is set by TreeParser01.
 	 */
-	public int ST_VAR = 1105;		// belongs to TreeParser01Cust
+	public int ST_VAR = 1105;		// belongs to TreeParser01
 
 	/** See Proparse documentation, "Node Attributes Reference". */
 	public int OPERATOR  = 1200;
@@ -90,7 +90,7 @@ public interface IConstants {
 
 	
 	//
-	// From TreeParser01Cust
+	// From TreeParser01
 	//
 
 
@@ -99,13 +99,13 @@ public interface IConstants {
 	 * an unqualified table field reference.
 	 * For example, "customer.name" is qualified, but
 	 * "name" is unqualified.
-	 * This node attribute is set by TreeParser01Cust.
+	 * This node attribute is set by TreeParser01.
 	 */
 	public int UNQUALIFIED_FIELD = 10150;
 	/**
 	 * Node attribute key, the value of which is a org.prorefactor.treeparser.CQ
 	 * "Context Qualifier" value representing read, write, init, etc.
-	 * Set by TreeParser01Cust, and as of 2004.7.16,
+	 * Set by TreeParser01, and as of 2004.7.16,
 	 * this is only set for Field_ref and RECORD_NAME nodes.
 	 * @see org.prorefactor.treeparser.CQ
 	 */

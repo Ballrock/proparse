@@ -23,7 +23,7 @@ import org.prorefactor.treeparser.ParseUnit;
 // TODO add back, or split out
 //import org.prorefactor.treeparser03.TP03Support;
 //import org.prorefactor.treeparser03.TreeParser03;
-import org.prorefactor.treeparserbase.JPTreeParserCust;
+import org.prorefactor.treeparserbase.JPTreeParser;
 
 
 /** Test all tree parsers against new syntax.
@@ -49,7 +49,7 @@ public class TestNewSyntax extends TestCase {
 			File file = (File) it.next();
 			System.out.println("Parse: " + file.getAbsolutePath());
 			ParseUnit pu = new ParseUnit(file);
-			pu.treeParser(new JPTreeParserCust());
+			pu.treeParser(new JPTreeParser());
 			pu.treeParser01();
 		}
 	}

@@ -190,7 +190,7 @@ public class PUB {
 	}
 	
 
-	/** This is called by TreeParser01Cust, and should not be called directly. */
+	/** This is called by TreeParser01, and should not be called directly. */
 	public void build(TP01Support support) throws IOException, RefactorException {
 		ParseUnit pu = support.getParseUnit();
 		// treeParser01 needs to have been run already.

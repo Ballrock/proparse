@@ -83,7 +83,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 		ti.fullText = fullText;
 		if (ti.bitset==0)
 			ti.bitset = flags;
-		nameNums.put(ProParserCust._tokenNames[type], type);
+		nameNums.put(ProParser._tokenNames[type], type);
 	}
 
 
@@ -124,7 +124,7 @@ public class NodeTypes implements ProParserTokenTypes, TokenTypesI, Xferable {
 	public static String getTypeName(int n) {
 		if (n > Last_Token_Number || n < 1)
 			return null;
-		String ret = ProParserCust._tokenNames[n];
+		String ret = ProParser._tokenNames[n];
 		if (ret.endsWith("_KW"))
 			ret = ret.substring(0, ret.length()-3);
 		return ret;
