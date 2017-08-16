@@ -696,13 +696,14 @@ data_relation
 			)*
 		)
 	;
+
 parent_id_relation
 	:	#(	PARENTIDRELATION (ID)?
 			FOR tbl[CQ.INIT] COMMA tbl[CQ.INIT] // TODO Verify context qualifier
 			PARENTIDFIELD fld1[CQ.SYMBOL]       // TODO Verify context qualifier
-			( PARENTFIELDSBEFORE LEFTPAREN fld1[CQ.SYMBOL] (COMMA fld1[CQ.SYMBOL])* RIGHTPAREN)? // TODO Verify context qualifier
-			( PARENTFIELDSAFTER  LEFTPAREN fld1[CQ.SYMBOL] (COMMA fld1[CQ.SYMBOL])* RIGHTPAREN)? // TODO Verify context qualifier
-			
+			( PARENTFIELDSBEFORE LEFTPAREN fld2[CQ.SYMBOL] (COMMA fld2[CQ.SYMBOL])* RIGHTPAREN)? // TODO Verify context qualifier
+			( PARENTFIELDSAFTER  LEFTPAREN fld2[CQ.SYMBOL] (COMMA fld2[CQ.SYMBOL])* RIGHTPAREN)? // TODO Verify context qualifier
+
 		)
 	;
 
