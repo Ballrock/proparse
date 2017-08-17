@@ -4,13 +4,13 @@
 
   <groupId>proparse</groupId>
   <artifactId>proparse</artifactId>
-  <version>5.0.0.0</version>
+  <version>5.0.0.1</version>
 
   <name>Proparse</name>
   <url>https://github.com/jcaillon/proparse</url>
 
   <properties>
-	<ikvm>${project.basedir}\ikvm\bin</ikvm>
+	<ikvm>ikvm\bin</ikvm>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <proparse.net.dir>${project.basedir}\..\proparse.net</proparse.net.dir>
   </properties>
@@ -155,8 +155,8 @@
 					<arg value="${project.build.directory}\${project.artifactId}-${project.version}.jar"/>
 					<arg value="${project.build.directory}\lib\*"/>
 				</exec>
-				<copy file="${ikvm}\ikvm.openjdk.core.dll" tofile="${proparse.net.dir}\ikvm.openjdk.core.dll" />
-				<copy file="${ikvm}\ikvm.runtime.dll" tofile="${proparse.net.dir}\ikvm.runtime.dll" />
+				<copy file="${project.basedir}\{$ikvm}\ikvm.openjdk.core.dll" tofile="${proparse.net.dir}\ikvm.openjdk.core.dll" />
+				<copy file="${project.basedir}\{$ikvm}\ikvm.runtime.dll" tofile="${proparse.net.dir}\ikvm.runtime.dll" />
 				<copy file="${project.basedir}\src\resources\assemblies.xml" tofile="${proparse.net.dir}\assemblies.xml" />
 				<copy file="${project.build.directory}\proparse.net.dll" tofile="${proparse.net.dir}\proparse.net.dll" />
               </target>
