@@ -1436,17 +1436,18 @@ class_type_name
 enumstate
   :  e:ENUM^ type_name2 (FLAGS)? block_colon
      defenumstate
-     enum_end
-     state_end
+     enum_end state_end
      {sthd(##,0);}
   ;
 
 defenumstate
-  : DEFINE^ ENUM (enum_member)+ state_end { sthd(##, ENUM); }
+  : DEFINE^ ENUM (options{greedy=true;}: enum_member)+
+    state_end
+    { sthd(##, ENUM); }
   ;
 
 enum_member
-  :  type_name2 ( EQUAL ( NUMBER | type_name2 (COMMA type_name2)*))?
+  :  type_name2 (EQUAL ( NUMBER | type_name2 (COMMA type_name2)*))?
   ;
 
 enum_end: END^ (ENUM)? ;
@@ -1844,9 +1845,7 @@ createwidgetpoolstate
 	;
 
 currentvaluefunc
-	:	CURRENTVALUE^ LEFTPAREN sequencename (COMMA identifier)? // logical name 
-	(COMMA expression)? // multitenant 
-	RIGHTPAREN
+	:	CURRENTVALUE^ LEFTPAREN sequencename (options{greedy=true;}: COMMA identifier)? (options{greedy=true;}: COMMA expression)? RIGHTPAREN
 	;
 
 // Basic variable class or primitive datatype syntax.
@@ -3189,8 +3188,8 @@ nextpromptstate
 	;
 
 nextvaluefunc
-	:	NEXTVALUE^ LEFTPAREN sequencename (COMMA identifier)? // logical name 
-  (COMMA expression)? // multitenant
+	:	NEXTVALUE^ LEFTPAREN sequencename (options{greedy=true;}: COMMA identifier)? // logical name
+  (options{greedy=true;}: COMMA expression)? // multitenant
   RIGHTPAREN
 	;
 

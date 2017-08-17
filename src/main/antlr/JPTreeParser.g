@@ -417,7 +417,7 @@ functioncall
 	|	#(FRAMEDOWN (LEFTPAREN ID RIGHTPAREN)? )
 	|	#(FRAMELINE (LEFTPAREN ID RIGHTPAREN)? )
 	|	#(FRAMEROW (LEFTPAREN ID RIGHTPAREN)? )
-	|	#(GETCODEPAGES (funargs)? )
+	|	#(GETCODEPAGES (options{greedy=true;}: funargs)? )
 	|	#(GUID LEFTPAREN (expression)? RIGHTPAREN )
 	|	#(IF expression THEN expression ELSE expression )
 	|	ldbnamefunc
@@ -609,7 +609,6 @@ noargfunc
 	|	GENERATEPBESALT
 	|	GENERATERANDOMKEY
 	|	GENERATEUUID
-  	|  GETCODEPAGES
 	|	GATEWAYS
 	|	GOPENDING
 	|	ISATTRSPACE
