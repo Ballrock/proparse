@@ -12,7 +12,8 @@
   <properties>
 	<ikvm>${project.basedir}\ikvm\bin</ikvm>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <proparse.net.dir>${project.basedir}\..\proparse.net</proparse.net.dir>
+    <proparse.net.dirname>proparse.net</proparse.net.dirname>
+    <proparse.net.dir>${project.basedir}\..\${proparse.net.dirname}</proparse.net.dir>
   </properties>
 
   <dependencies>
@@ -159,6 +160,10 @@
 				<copy file="${ikvm}\ikvm.runtime.dll" tofile="${proparse.net.dir}\ikvm.runtime.dll" />
 				<copy file="${project.basedir}\src\resources\assemblies.xml" tofile="${proparse.net.dir}\assemblies.xml" />
 				<copy file="${project.build.directory}\proparse.net.dll" tofile="${proparse.net.dir}\proparse.net.dll" />
+				<zip destfile="${project.build.directory}\proparse.net.zip"
+					basedir="${proparse.net.dir}\.."
+					includes="${proparse.net.dirname}/*"
+					/>
               </target>
             </configuration>
             <goals>
